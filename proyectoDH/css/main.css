@@ -3,7 +3,9 @@
 @import "dudas.css";
 @import "bienvenidos.css";
 @import "register.css";
-@import "reset-password";
+@import "reset-password.css";
+@import "perfil.css";
+
 
 *{
   box-sizing: border-box;
