@@ -147,32 +147,26 @@ function abrirBaseDatos(){
     }
 }
 
-//Esta función la cree para lograr determinar la creación del archivo json, pero ahora con la nueva clave del usuario, ya que el usuairo se le habia olvidado la misma, lo puedo hacer en una sóla función, sin embargo lo realice por separado, para que ustedes lo comprendieran mejor, trabajando todo por parte
+
 function armarRegistroOlvide($datos){
     $usuarios = abrirBaseDatos();
 
     foreach ($usuarios as $key=>$user) {
 
         if($datos["email"]==$user["email"]){
-            //Esta línea se las comente para que a futuro puedan probar si la clave nueva la van a grabar coorectamente, la idea es verla antes de hashearla.
-            //$usuario["password"]= $datos["password"];
             $user["password"]= password_hash($datos["password"],PASSWORD_DEFAULT);
             $usuarios[$key] = $user;
         }
         $usuarios[$key] = $user;
     }
 
-    //Esto se los coloque para que sepan que con esta función podemos borrar un archivo
     unlink("users.json");
     foreach ($usuarios as  $user) {
         $jsusuario = json_encode($user);
         file_put_contents('users.json',$jsusuario. PHP_EOL,FILE_APPEND);
     }
-
-//Esta función no retorna nada, ya que su  responsabilidad es guardar al usuario, pero con su nueva contraseña
 }
 
-//Aqui creo los las variables de session y de cookie de mi usuario que se está loguendo
 function seteoUsuario($user,$dato){
     $_SESSION["nombre"]=$user["nombre"];
     $_SESSION["email"] = $user["email"];
@@ -183,7 +177,6 @@ function seteoUsuario($user,$dato){
         setcookie("password",$dato["password"],time()+3600);
     }
 }
-//Con esta función controlo si el usuario se logueo o ya tenemos las cookie en la máquina
 function validarUsuario(){
     if($_SESSION["email"]){
         return true;
