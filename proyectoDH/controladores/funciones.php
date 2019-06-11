@@ -115,7 +115,6 @@ function guardarUser($usuario){
     file_put_contents('users.json',$usuariojson. PHP_EOL, FILE_APPEND);
 }
 
-//Función que nos permite buscar por email, a ver si el usuario existe o no en nuestra base de datos, que ahorita es un archivo json.
 function buscarEmail($email){
     $usuarios = abrirBaseDatos();
     if($usuarios!==null){
@@ -129,7 +128,6 @@ function buscarEmail($email){
     return null;
 }
 
-//Esta función abre nuestro archivo json y lo prepara para eliminar el último registro en blanco y además, fijese que además genero el array asociativo del mismo. Convierto de json a array asociativo para mas adelante con la funcion "bucarEmail" poder recorrerlo y verificar si el usuario existe o no en mi base de datos.
 function abrirBaseDatos(){
     if(file_exists("users.json")){
         $baseDatosJson= file_get_contents("users.json");
