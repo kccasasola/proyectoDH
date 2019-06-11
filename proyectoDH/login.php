@@ -7,11 +7,11 @@ if ($_POST){
   if(count($errores)==0){
     $user=buscarEmail($_POST["email"]);
       if(validarUsuario()){
-        //Cuando esté hecho el perfil.php redireccionar ahí//
-          RedirectToURL("index.php");
+
+          RedirectToURL("perfil.php");
         }else{
           seteoUsuario($user, $_POST);
-          RedirectToURL("index.php");
+          RedirectToURL("perfil.php");
         }
       }
 
