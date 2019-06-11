@@ -52,6 +52,20 @@ function validar($datos,$pantalla){
           $errores["repassword"]="Las contraseñas no coinciden";
         }
       }
+    /*VALIDACION PREGUNTA SECRETA*/
+    if(isset($datos["answer"])){
+      $answer = trim($datos["answer"]);
+    }
+    $question=$datos["question"];
+    if($question==0){
+        $errores["question"]="Seleccione una pregunta secreta";
+      }
+    if(empty($datos["answer"])){
+        $errores["answer"]="La respuesta no puede estar vacia";
+      }
+
+
+
 
     if($pantalla == "registro"){
       $nombre = $_FILES["avatar"]["name"];
@@ -90,6 +104,8 @@ function armarUser($datos,$imagen){
         "user"=>$datos["user"],
         "password"=> password_hash($datos["password"],PASSWORD_DEFAULT),
         "avatar"=>$imagen,
+        "question"=>$datos["question"],
+        "answer"=>$datos["answer"],
     ];
     return $usuario;
 }
@@ -186,6 +202,11 @@ function RedirectToURL($url)
     exit;
 }
 
+function Login($datos){
+
+
+}
+
 function validarLogin($datos){
   $errores=[];
   $user = buscarEmail($datos["email"]);
@@ -200,34 +221,50 @@ function validarLogin($datos){
   return $errores;
 }
 
-function EmailResetPasswordLink(){
+function resetPasswordRequest(){
   $errores=[];
   if(empty($_POST['user'])){
     $errores["empty"]="El campo usuario es requerido";
   }
   else{
     $user=trim($_POST["user"]);
-    if(buscarUser($user)==Null){
-      $errores["user"]="Ususario no registrado"
+    if(buscarUser($user)==null){
+      $errores["user"]="Ingreso no válido";
     }
-    else{
-    $email=buscarUser($user);
-    enviarPass($email);
-    RedirectToURL("reset-pwd-sent.php");
-
-
+   }
+  if(buscarUser($user)!=null){
+    $usuario=buscarUser($user);
+    if($_POST["question"]==0){
+      $errores["question"]="Ingreso no válido";
+    }
+    elseif($_POST["question"]!=0){
+      if($_POST["question"]!=$usuario["question"]){
+        $errores["question"]="Ingreso no válido";
+      }
+      elseif($_POST["answer"]==0){
+        $errores["answer"]="Ingreso no válido";
+      }
+      elseif($_POST["answer"]!=$usuario["answer"]){
+        $errores["answer"]="Ingreso no válido";
+      }
     }
   }
+   return $errores;
+ }
+
+
+
+
 
 function buscarUser($user){
-      $usuarios = abrirBaseDatos();
-      if($usuarios!==null){
-          foreach ($usuarios as $user) {
-              if($user === $usuario["user"]){
-                  return $usuario["email"];
-              }
+  $usuarios = abrirBaseDatos();
+  if($usuarios!==null){
+      foreach ($usuarios as $usuario) {
+          if($user === $usuario["user"]){
+              return $usuario;
           }
       }
-
-      return null;
   }
+
+  return null;
+}

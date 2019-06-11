@@ -3,16 +3,9 @@ require_once("./controladores/funciones.php");
 require_once("helpers.php");
 
 if ($_POST){
-  $errores=resetPasswordRequest($_POST);
-  $usuario=buscarUser($_POST["user"]);
-  if(count($errores)==0){
-    seteoUsuario($_POST["user"], $usuario);
-    if (validarUsuario()){
-    RedirectToURL("change-pwd.php");
-  }
 
 }
-}
+
  ?>
 <!DOCTYPE html>
   <html lang="es" dir="ltr">
@@ -53,40 +46,36 @@ if ($_POST){
     <div class="container-fluid div-separacion">
       <div class="row">
         <div class="col-12">
-          <div class="reset-pass">
-            <h3>Olvidé mi contraseña</h3>
+          <div class="change-pass">
+            <?php if(isset($_SESSION["user"])){
+              $usuario=$_SESSION["user"];?>
+            <h3>Recuperar contraseña</h3>
             <br>
-            ¿No recuerdas tu contraseña? ¡No te preocupes! Te podemos ayudar. Llena este formulario y sigue los pasos para poder restablecerla.
+            Ingresa la respuesta a tu pregunta secreta para acceder al cambio de contraseña.
             <br>
+
           </div>
           <form method="POST" action=""  enctype= "multipart/form-data">
             <div class="form-group form-size div-form">
-              <br>
-              <label for="userInput">Usuario</label>
-              <input type="text" name="user" class="form-control" id="userInput" placeholder="Ingrese usuario" value="<?=(isset($errores["user"]) )? "" : inputUser("user");?>">
+              <input type="text" name="answer" class="form-control" id="userInput" placeholder="Ingrese respuesta" value="<?=(isset($errores["answer"]) )? "" : inputUser("answer");?>">
+              <?php
+              if(isset($errores["empty"])){?>
+                <div class="alert alert-light" role="alert">
+                  <?php echo $errores["empty"]; ?>
+                </div>
+              <?php } ?>
+              <?php
+              if(isset($errores["answer"])){?>
+                <div class="alert alert-light" role="alert">
+                  <?php echo $errores["answer"]; ?>
+                </div>
+              <?php } ?>
             </div>
-            <label for="exampleInputPassword1">Pregunta secreta</label>
-            <br>
-            <select class="form-control" id="exampleFormControlSelect1" name="question">
-              <option selected value="0"> Elige una opción </option>
-              <option value="1">Nombre de tu primera mascota</option>
-              <option value="2">Destino de tu primer viaje en avión</option>
-              <option value="3">Nombre de tu mejor amigo de la infancia</option>
-              <option value="4">Apellido de tu abuela</option>
-            </select>
-            <br>
-            <input type="password" class="form-control" name="answer" id="Inputanswer" placeholder="Ingresar respuesta secreta">
-          </div>
-          <?php
-          if(count($errores)!=0){?>
-            <div class="alert alert-light" role="alert">
-              <?php echo str($errores); ?>
-            </div>
-          <?php } ?>
-          <div class="form-group row">
+            <div class="form-group row">
               <button type="submit" class="btn btn-primary buttonregister">Enviar</button>
             </div>
           </form>
+        <?php }?>
         </div>
       </div>
     </div>

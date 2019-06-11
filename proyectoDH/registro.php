@@ -83,6 +83,20 @@ if ($_POST){
         <input type="password" class="form-control" name="repassword" id="exampleInputPassword1" placeholder="Ingresar nuevamente contraseña">
       </div>
 
+      <div class="form-group">
+        <label for="exampleInputPassword1">Pregunta secreta</label>
+        <br>
+        <select class="form-control" id="exampleFormControlSelect1" name="question">
+          <option selected value="0"> Elige una opción </option>
+          <option value="1">Nombre de tu primera mascota</option>
+          <option value="2">Destino de tu primer viaje en avión</option>
+          <option value="3">Nombre de tu mejor amigo de la infancia</option>
+          <option value="4">Apellido de tu abuela</option>
+        </select>
+        <br>
+        <input type="password" class="form-control" name="answer" id="Inputanswer" placeholder="Ingresar respuesta secreta">
+      </div>
+
 
       <?php
       if(isset($errores)):?>
