@@ -72,8 +72,8 @@ function validar($datos,$pantalla){
       $ext = pathinfo($nombre,PATHINFO_EXTENSION);
         if($_FILES["avatar"]["error"]!=0){
             $errores["avatar"]="Debe subir una imagen";
-        }elseif($ext != "png"){
-            $errores["avatar"]="La imagen tiene que tener formato PNG";
+        }elseif($ext != "png" && $ext != "jpg" && $ext != "jpeg"){
+            $errores["avatar"]="La imagen tiene un formato inválido";
         }
 
     }
