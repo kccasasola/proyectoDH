@@ -1,0 +1,56 @@
+.avatar {
+    height: 200px;
+    width: 200px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 50%;
+    background-size: 100% auto;
+    margin-right: 0PX;
+}
+
+.banner-profile{
+  background-image: url("../img/profile0.gif");
+  min-height: 200px;
+  background-color: black;
+  margin-bottom: 30px;
+}
+
+.user {
+  color: white;
+  text-align: left;
+  align-self: center;
+  font-weight: bold;
+  font-size: 25PX;
+  margin-left: 0%;
+  background-color: rgba(0, 0, 0, 0.7);
+  
+}
+
+ .titulo-viajes {
+   color: white;
+   background-color: #d1964c;
+   text-align: center;
+}
+.titulo-carta {
+  color: #d1964c !important;
+  font-weight: bold;
+}
+
+.boton-carta {
+  background-color: #d1964c !important;
+  color: white;
+}
+
+.texto-carta {
+  color: black !important;
+
+}
+
+.carta {
+  background-color: white !important;
+  border-color: #988E7D;
+  border-width: medium;
+  margin-right: 10px !important;
+  margin-left: 0px !important;
+  margin-top: 20px !important;
+}

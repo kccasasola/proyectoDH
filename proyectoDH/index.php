@@ -30,7 +30,7 @@
       </li>
       <li class="nav-item margin-li">
         <a class="nav-link color-a" href="login.php">Login</a>
-      </li>      
+      </li>
     </ul>
   </div>
 </nav>
