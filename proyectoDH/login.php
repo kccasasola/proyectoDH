@@ -1,23 +1,58 @@
 <?php
-require_once("./controladores/funciones.php");
-require_once("helpers.php");
+require_once("autoload.php");
+if($_POST){
+  $tipoConexion = "MYSQL";
+  if($tipoConexion=="JSON"){
+      $usuario = new Usuario($_POST["email"],$_POST["password"]);
+      $errores= $validar->validacionLogin($usuario);
+      if(count($errores)==0){
 
-if ($_POST){
-  $errores = validarLogin($_POST);
-  if(count($errores)==0){
-    $user=buscarEmail($_POST["email"]);
-      if(validarUsuario()){
-
-          RedirectToURL("perfil.php");
+        $usuarioEncontrado = $json->buscarPorEmail($usuario->getEmail());
+        if($usuarioEncontrado == null){
+          $errores["email"]="Usuario no registrado";
         }else{
-          seteoUsuario($user, $_POST);
-          RedirectToURL("perfil.php");
+          if(Autenticador::verificarPassword($usuario->getPassword(),$usuarioEncontrado["password"] )!=true){
+            $errores["password"]="Error en los datos ingresados";
+          }else{
+            Autenticador::seteoSesion($usuarioEncontrado);
+            if(isset($_POST["recordar"])){
+              Autenticador::seteoCookie($usuarioEncontrado);
+            }
+            if(Autenticador::validarUsuario()){
+              header("perfil.php");
+            }else{
+              header("registro.php");
+            }
+          }
         }
       }
+  }else{
 
+      $usuario = new Usuario($_POST["email"],$_POST["password"]);
+      $errores= $validar->validacionLogin($usuario);
+      if(count($errores)==0){
+        $usuarioEncontrado = BaseMYSQL::buscarPorEmail($usuario->getEmail(),$pdo,'users');
+        if($usuarioEncontrado == false){
+          $errores["email"]="Usuario no registrado";
+        }else{
+          if(Autenticador::verificarPassword($usuario->getPassword(),$usuarioEncontrado["password"] )!=true){
+            $errores["password"]="Error en los datos ingresados";
+          }else{
+            Autenticador::seteoSesion($usuarioEncontrado);
+            if(isset($_POST["recordar"])){
+              Autenticador::seteoCookie($usuarioEncontrado);
+            }
+            if(Autenticador::validarUsuario()){
+              header("perfil.php");
+            }else{
+              redirect("registro.php");
+            }
+          }
+        }
+      }
   }
-
- ?>
+}
+?>
 <!DOCTYPE html>
   <html lang="es" dir="ltr">
   <head>
@@ -27,79 +62,68 @@ if ($_POST){
   <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
-  <div class="container-fluid">
-    <header class="color-a">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light background-nav">
-       <img class="logo-img"src="img/logo.png" alt="logo">
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-       <span class="navbar-toggler-icon"></span>
-     </button>
-     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-       <ul class="navbar-nav">
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="index.php">Home</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="dudas.php">Preguntas frecuentes</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="registro.php">Registrarme</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="login.php">Login</a>
-         </li>
-       </ul>
-     </div>
-   </nav>
-  </header>
+    <body>
+      <div class="container-fluid">
+        <header class="color-a">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light background-nav">
+           <img class="logo-img"src="img/logo.png" alt="logo">
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+           <ul class="navbar-nav">
+             <li class="nav-item margin-li">
+               <a class="nav-link color-a" href="index.php">Home</a>
+             </li>
+             <li class="nav-item margin-li">
+               <a class="nav-link color-a" href="dudas.php">Preguntas frecuentes</a>
+             </li>
+             <li class="nav-item margin-li">
+               <a class="nav-link color-a" href="registro.php">Registrarme</a>
+             </li>
+             <li class="nav-item margin-li">
+               <a class="nav-link color-a" href="login.php">Login</a>
+             </li>
+           </ul>
+         </div>
+       </nav>
+      </header>
       <div class="container-fluid div-separacion">
-
-      <form method="POST" action=""  enctype= "multipart/form-data">
-        <h3>Inciar Sesión</h3>
+        <?php
+          if(isset($errores)):?>
+            <ul class="alert alert-light">
+              <?php
+              foreach ($errores as $key => $value) :?>
+                <li> <?=$value;?> </li>
+                <?php endforeach;?>
+            </ul>
+          <?php endif;?>
+          <!-- VERIFICAR VALUE EN CADA INPUT -->
+      <form>
         <div class="form-group form-size div-form">
-
-          <label for="userInput">Email</label>
-          <input type="text" name="email" class="form-control" id="userInput" placeholder="Ingrese Email" value="<?=(isset($errores["user"]) )? "" : inputUser("user");?>">
-          <?php
-          if(isset($errores["user"])){?>
-          <div class="alert alert-light" role="alert">
-            <?php echo $errores["user"]; ?>
-          </div>
-        <?php } ?>
-
+          <label for="formGroupExampleInput">Usuario</label>
+          <input type="text" class="form-control"  id="formGroupExampleInput" placeholder="Ingrese usuario"
+          >
         </div>
         <div class="form-group form-size">
-          <label for="passInput">Contraseña</label>
-          <input name="password" type="password" type="text" class="form-control" id="passInput" placeholder="Ingrese contraseña" value="<?=(isset($errores["password"]) )? "" : inputUser("password");?>">
-          <?php
-          if(isset($errores["password"])){?>
-          <div class="alert alert-light" role="alert">
-            <?php echo $errores["password"]; ?>
-          </div>
-        <?php }?>
-        </div>
-        <span class"rest_pass"><a href="reset-pwd-req.php">Olvidé mi contraseña</a></span>
-
-        <div class="form-group row">
-          <div class="col-sm-10">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="gridCheck1">
-              <label class="form-check-label" for="gridCheck1">
-                Recordarme
-              </label>
-
-
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-
-
-
-          <button type="submit" class="btn btn-primary buttonregister">Ingresar</button>
+          <label for="formGroupExampleInput2">Contraseña</label>
+          <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese contraseña">
         </div>
       </form>
+    <div class="form-group row">
+    <div class="col-sm-10">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="gridCheck1">
+        <label class="form-check-label" for="gridCheck1">
+          Recordarme
+        </label>
+      </div>
+    </div>
+    </div>
+    <div class="form-group row">
+    <button type="submit" class="btn btn-primary buttonregister">Ingresar</button>
+    </div>
+    </div>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

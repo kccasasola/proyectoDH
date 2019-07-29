@@ -1,4 +1,9 @@
-<?php  ?>
+<?php
+require_once("autoload.php");
+if(!isset($_SESSION["email"])) {
+    header("registro.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,15 +32,15 @@
           <a class="nav-link color-a" href="perfil.php">Mi perfil</a>
         </li>
         <li class="nav-item margin-li">
-          <a class="nav-link color-a" href="index.php">Log Out</a>
+          <a class="nav-link color-a" href="logout.php">Log Out</a>
         </li>
     </div>
 </nav>
 </header>
 </div>
     <div class="banner-profile col-md-12 col-lg-12 col-sm-12 d-flex flex-wrap justify-content-center ">
-    <div class=" col-lg-1"><img src="img/profile.png" alt="" class="avatar"></div>
-    <p class="user col-lg-6 col-sm-12 col-md-6">USER <br> RANGO <br> PAIS </p>
+    <div class=" col-lg-1"><img src="users-img/<?=$_SESSION["avatar"];?>" alt="" class="avatar"></div>
+    <p class="user col-lg-6 col-sm-12 col-md-6"><?=$_SESSION["email"];?><br> </p>
     </div>
 
 
