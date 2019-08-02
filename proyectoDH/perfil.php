@@ -18,24 +18,7 @@ if(!isset($_SESSION["email"])) {
 <body>
   <div class="container-fluid">
   <header class="color-a">
-   <nav class="navbar navbar-expand-lg navbar-light bg-light background-nav">
-    <img class="logo-img"src="img/logo.png" alt="logo">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item margin-li">
-          <a class="nav-link color-a" href="home.php">Home</a>
-        </li>
-        <li class="nav-item margin-li">
-          <a class="nav-link color-a" href="perfil.php">Mi perfil</a>
-        </li>
-        <li class="nav-item margin-li">
-          <a class="nav-link color-a" href="logout.php">Log Out</a>
-        </li>
-    </div>
-</nav>
+   <?php require_once("navbar.php");?>
 </header>
 </div>
     <div class="banner-profile col-md-12 col-lg-12 col-sm-12 d-flex flex-wrap justify-content-center ">

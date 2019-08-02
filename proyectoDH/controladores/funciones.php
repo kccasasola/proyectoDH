@@ -1,84 +1,5 @@
 <?php
 session_start();
-require_once("helpers.php");
-
-function validar($datos,$pantalla){
-    $errores=[];
-      /*VALIDACION NOMBRE*/
-      if(isset($datos["nombre"])){
-        $nombre = trim($datos["nombre"]);
-        if(empty($nombre)){
-            $errores["nombre"]= "El nombre no puede estar vacio";
-        }elseif (!preg_match("/^[a-zA-Z ]*$/",$nombre)) {
-            $errores["nombre"]="El nombre solo debe contener letras o espacios en blanco";
-        }
-      }
-      /*VALIDACION EMAIL*/
-        $email = trim($datos["email"]);
-        if(empty($email)){
-            $errores["email"]= "El email no puede estar vacio";
-        }elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        $errores["email"]="El formato de e-mail no es válido";
-      }
-      /*VALIDACION USER*/
-      if(isset($datos["user"])){
-        $user = trim($datos["user"]);
-        if(empty($user)){
-            $errores["user"]= "El usuario no puede estar vacio";
-        }elseif (!preg_match("/^[a-zA-Z]*$/",$user)) {
-            $errores["user"]="El usuario no debe contener caracteres especiales";
-        }elseif (strpos($user, " ")) {
-          $errores["user"]="El usuario no debe contener espacios";
-        }
-      }
-      /*VALIDACION PASS*/
-      if(isset($datos["password"])){
-        $password = trim($datos["password"]);
-      if (strlen($password)<6) {
-        $errores["password"]="La contraseña debe tener como mínimo 6 caracteres, una letra minúscula, una letra mayúscula y al menos un caracter numérico";
-      }elseif (!preg_match('`[a-z]`',$password)){
-        $errores["password"]="La contraseña debe tener como mínimo 6 caracteres, una letra minúscula, una letra mayúscula y al menos un caracter numérico";
-      }elseif (!preg_match('`[A-Z]`',$password)){
-        $errores["password"]="La contraseña debe tener como mínimo 6 caracteres, una letra minúscula, una letra mayúscula y al menos un caracter numérico";
-      }elseif (!preg_match('`[0-9]`',$password)){
-        $errores["password"]="La contraseña debe tener como mínimo 6 caracteres, una letra minúscula, una letra mayúscula y al menos un caracter numérico";
-      }
-    }
-    /*VALIDACION REPASS*/
-      if(isset($datos["repassword"],$datos["password"])){
-          $password = trim($datos["password"]);
-          $repassword = trim($datos["repassword"]);
-        if ($password != $repassword) {
-          $errores["repassword"]="Las contraseñas no coinciden";
-        }
-      }
-    /*VALIDACION PREGUNTA SECRETA*/
-    if(isset($datos["answer"])){
-      $answer = trim($datos["answer"]);
-    }
-    $question=$datos["question"];
-    if($question==0){
-        $errores["question"]="Seleccione una pregunta secreta";
-      }
-    if(empty($datos["answer"])){
-        $errores["answer"]="La respuesta no puede estar vacia";
-      }
-
-
-
-
-    if($pantalla == "registro"){
-      $nombre = $_FILES["avatar"]["name"];
-      $ext = pathinfo($nombre,PATHINFO_EXTENSION);
-        if($_FILES["avatar"]["error"]!=0){
-            $errores["avatar"]="Debe subir una imagen";
-        }elseif($ext != "png" && $ext != "jpg" && $ext != "jpeg"){
-            $errores["avatar"]="La imagen tiene un formato inválido";
-        }
-
-    }
-    return $errores;
-}
 
 function inputUser($campo){
     if(isset($_POST[$campo])){
@@ -187,16 +108,6 @@ function validarUsuario(){
 
 }
 
-function RedirectToURL($url)
-{
-    header("Location: $url");
-    exit;
-}
-
-function Login($datos){
-
-
-}
 
 function validarLogin($datos){
   $errores=[];
@@ -212,40 +123,6 @@ function validarLogin($datos){
   return $errores;
 }
 
-function resetPasswordRequest(){
-  $errores=[];
-  if(empty($_POST['user'])){
-    $errores["empty"]="El campo usuario es requerido";
-  }
-  else{
-    $user=trim($_POST["user"]);
-    if(buscarUser($user)==null){
-      $errores["user"]="Ingreso no válido";
-    }
-   }
-  if(buscarUser($user)!=null){
-    $usuario=buscarUser($user);
-    if($_POST["question"]==0){
-      $errores["question"]="Ingreso no válido";
-    }
-    elseif($_POST["question"]!=0){
-      if($_POST["question"]!=$usuario["question"]){
-        $errores["question"]="Ingreso no válido";
-      }
-      elseif($_POST["answer"]==0){
-        $errores["answer"]="Ingreso no válido";
-      }
-      elseif($_POST["answer"]!=$usuario["answer"]){
-        $errores["answer"]="Ingreso no válido";
-      }
-    }
-  }
-   return $errores;
- }
-
-
-
-
 
 function buscarUser($user){
   $usuarios = abrirBaseDatos();
@@ -260,8 +137,7 @@ function buscarUser($user){
   return null;
 }
 
-function loginController()
-    {
+function loginController(){
         if (isset($_SESSION["email"])) {
             return true;
         } else {
@@ -272,4 +148,23 @@ function loginController()
                 return false;
             }
         }
+    }
+    function dd($valor){
+        echo "<pre>";
+            var_dump($valor);
+            exit;
+        echo "</pre>";
+    }
+
+    function test_input($data) {
+      $data = trim($data);
+      $data = stripslashes($data);
+      $data = htmlspecialchars($data);
+      return $data;
+    }
+
+    function RedirectToURL($url)
+    {
+        header("Location: $url");
+        exit;
     }

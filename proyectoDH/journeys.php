@@ -10,28 +10,7 @@
 <body>
   <div class="container-fluid">
     <header class="color-a">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light background-nav">
-       <img class="logo-img"src="img/logo.png" alt="logo">
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-       <span class="navbar-toggler-icon"></span>
-     </button>
-     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-       <ul class="navbar-nav">
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="index.php">Home</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="dudas.php">Preguntas frecuentes</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="registro.php">Registrarme</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="login.php">Login</a>
-         </li>
-       </ul>
-     </div>
-   </nav>
+      <?php require_once("navbar.php");?>
   </header>
   <article class="formulario">
     <form action="" method="POST" enctype= "multipart/form-data">

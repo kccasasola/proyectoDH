@@ -1,17 +1,18 @@
 <?php
-include_once("controladores/funciones.php");
+include_once("autoload.php");
 if ($_POST){
-  $errores=validar($_POST,"registro");
-  if(count($errores)==0){
+  $errors=Registration::validate($_POST,"registro");
+  if(count($errors)==0){
     $user = buscarEmail($_POST["email"]);
     if($user !== null){
-      $errores["email"]="El usuario ya se encuentra registrado";
+      $errors["email"]="El usuario ya se encuentra registrado";
     }else{
-      $avatar = armarAvatar($_FILES,$_POST);
-      $registro = armarUser($_POST,$avatar);
-      guardarUser($registro);
-      header("location:bienvenido.php");
-      exit;
+      if(gettype($_FILES) == "array"){
+      $picture = Registration::setAvatar($_FILES);
+      $registro = new RegularUser($_POST["name"], $_POST["user"], Encrypt::hashPassword($_POST["password"]), $_POST["email"], $picture);
+      DataBase::saveUser($pdo, $registro, 'users', $picture);
+      RedirectToURL("bienvenido.php");
+    }
     }
   }
 }
@@ -28,49 +29,27 @@ if ($_POST){
 <body>
   <div class="container-fluid">
     <header class="color-a">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light background-nav">
-       <img class="logo-img"src="img/logo.png" alt="logo">
-       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-       <span class="navbar-toggler-icon"></span>
-     </button>
-     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-       <ul class="navbar-nav">
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="index.php">Home</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="dudas.php">Preguntas frecuentes</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="registro.php">Registrarme</a>
-         </li>
-         <li class="nav-item margin-li">
-           <a class="nav-link color-a" href="login.php">Login</a>
-         </li>
-       </ul>
-     </div>
-   </nav>
+      <?php require_once("navbar.php");?>
   </header>
   <article class="formulario">
-    <form action="" method="POST" enctype= "multipart/form-data">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" enctype= "multipart/form-data">
       <div class="form-group">
         <label for="exampleInputEmail1">Nombre</label>
-        <input name="nombre" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresar nombre" value="<?=(isset($errores["nombre"]) )? "" : inputUser("nombre");?>">
+        <input name="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresar nombre" value="<?=(isset($errors["nombre"]) )? "" : inputUser("nombre");?>">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail">E-mail</label>
+        <input name="email" type="text" class="form-control" id="exampleInputEmail" placeholder="Ingresar e-mail" value="<?=isset($errors["email"])? "":inputUser("email") ;?>">
       </div>
 
       <div class="form-group">
-        <label for="exampleInputPassword1">E-mail</label>
-        <input name="email" type="text" class="form-control" id="exampleInputPassword1" placeholder="Ingresar e-mail" value="<?=isset($errores["email"])? "":inputUser("email") ;?>">
+        <label for="exampleInputUser">Usuario</label>
+        <input name="user" type="text" class="form-control" id="exampleInputUser" aria-describedby="emailHelp" placeholder="Ingresar usuario" value="<?=(isset($errors["user"]) )? "" : inputUser("user");?>">
       </div>
 
       <div class="form-group">
-        <label for="exampleInputEmail1">Usuario</label>
-        <input name="user" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresar usuario" value="<?=(isset($errores["user"]) )? "" : inputUser("user");?>">
-      </div>
-
-      <div class="form-group">
-      <label for="exampleInputEmail1">Foto de perfil</label><br>
-      <input  type="file" name="avatar" value=""/ >
+      <label for="exampleInputAvatar">Foto de perfil</label><br>
+      <input  type="file" name="picture" value=""/ >
       </div>
 
       <div class="form-group">
@@ -79,30 +58,16 @@ if ($_POST){
       </div>
 
       <div class="form-group">
-        <label for="exampleInputPassword1">Confirmar contraseña</label>
-        <input type="password" class="form-control" name="repassword" id="exampleInputPassword1" placeholder="Ingresar nuevamente contraseña">
-      </div>
-
-      <div class="form-group">
-        <label for="exampleInputPassword1">Pregunta secreta</label>
-        <br>
-        <select class="form-control" id="exampleFormControlSelect1" name="question">
-          <option selected value="0"> Elige una opción </option>
-          <option value="1">Nombre de tu primera mascota</option>
-          <option value="2">Destino de tu primer viaje en avión</option>
-          <option value="3">Nombre de tu mejor amigo de la infancia</option>
-          <option value="4">Apellido de tu abuela</option>
-        </select>
-        <br>
-        <input type="password" class="form-control" name="answer" id="Inputanswer" placeholder="Ingresar respuesta secreta">
+        <label for="exampleInputPassword2">Confirmar contraseña</label>
+        <input type="password" class="form-control" name="repassword" id="exampleInputPassword2" placeholder="Ingresar nuevamente contraseña">
       </div>
 
 
       <?php
-      if(isset($errores)):?>
+      if(isset($errors)):?>
         <ul class="alert alert-light">
           <?php
-          foreach ($errores as $key => $value) :?>
+          foreach ($errors as $key => $value) :?>
             <li> <?=$value;?> </li>
             <?php endforeach;?>
         </ul>
