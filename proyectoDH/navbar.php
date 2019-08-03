@@ -16,7 +16,7 @@
       <?php elseif(loginController()): ?>
       <li class="nav-item margin-li"><a class="nav-link color-a" href="index.php">Home</a></li>
       <li class="nav-item margin-li"><a class="nav-link color-a" href="perfil.php">Mi perfil</a></li>
-      <li class="nav-item margin-li"><a class="nav-link color-a" href="index.php">Logout</a></li>
+      <li class="nav-item margin-li"><a class="nav-link color-a" href="logout.php">Logout</a></li>
       <?php endif;?>
     </ul>
   </div>

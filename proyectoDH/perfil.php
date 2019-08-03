@@ -22,8 +22,8 @@ if(!isset($_SESSION["email"])) {
 </header>
 </div>
     <div class="banner-profile col-md-12 col-lg-12 col-sm-12 d-flex flex-wrap justify-content-center ">
-    <div class=" col-lg-1"><img src="users-img/<?=$_SESSION["avatar"];?>" alt="" class="avatar"></div>
-    <p class="user col-lg-6 col-sm-12 col-md-6"><?=$_SESSION["email"];?><br> </p>
+    <div class=" col-lg-1"><img src="img/<?=$_SESSION["avatar"];?>" alt="" class="avatar"></div>
+    <p class="user col-lg-6 col-sm-12 col-md-6">Perfil de <?=$_SESSION["user"];?><br> </p>
     </div>
 
 

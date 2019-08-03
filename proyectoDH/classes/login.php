@@ -13,7 +13,7 @@ abstract class LogIn implements Validatable{
     $_SESSION["user"] = $user["user"];
     $_SESSION["email"] = $user["email"];
     // $_SESSION["role"]= $user["role"];
-    // $_SESSION["avatar"]= $user["avatar"];
+    $_SESSION["avatar"]= $user["avatar"];
   }
   static public function setCookie($user){
     setcookie("user",$user["user"],time()+3600);

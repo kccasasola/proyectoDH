@@ -18,19 +18,16 @@ require_once("autoload.php");
         $errores["user"] = "Usuario no registrado";
       } else {
         LogIn::setSession($usuarioEncontrado);
-        echo "Funciona todo bien";
         if(isset($_POST["recordar"])){
           LogIn::setCookie($usuarioEncontrado);
-          echo "Se guardaron las cookies";
-        }
+          }
         else if(LogIn::existSession()){
-          redirectToURL("perfil.php");
+          redirectToURL("registro.php");
         }
-        //   RedirectToURL("registro.php");
-        // }
+          RedirectToURL("index.php");
+        }
       }
     }
-  }
 ?>
 <!DOCTYPE html>
   <html lang="es" dir="ltr">
