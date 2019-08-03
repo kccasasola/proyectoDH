@@ -77,3 +77,13 @@ footer{
   padding: 20px;
   text-align: center;
 }
+
+.indexlogin {
+  border-color: #d1964c;
+  border-style: dotted;
+  text-align: center;
+  color: black;
+  height: 60px;
+  max-width: 500px;
+  padding-top: 5px;
+}

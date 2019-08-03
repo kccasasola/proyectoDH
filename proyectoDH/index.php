@@ -81,6 +81,11 @@ if(!isset($_SESSION["email"])) {
 <!-- HOME CUANDO EL USUARIO ESTA LOGUEADO -->
 <?php elseif(loginController()): ?>
 
+<br>
+<br>
+<h2 class="indexlogin">¿Ya elegiste tu próximo destino?</h2>
+<br>
+<br>
 <script src="https://www.amcharts.com/lib/3/ammap.js" type="text/javascript"></script>
 <script src="https://www.amcharts.com/lib/3/maps/js/worldHigh.js" type="text/javascript"></script>
 <script src="https://www.amcharts.com/lib/3/themes/dark.js" type="text/javascript"></script>
